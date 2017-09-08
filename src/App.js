@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Bu from './buttonComponent';
 import Result from './resultComponent';
+import Input from './inputComponent';
 
 class App extends Component {
   constructor() {
@@ -11,15 +12,23 @@ class App extends Component {
       result: '',
       array: [],
       count: 0,
+      fun:this.callBack,
+      calc:this.evaluate
+
     };
-    this.buttonClick = this.buttonClick.bind(this);
+
+   // this.buttonClick = this.buttonClick.bind(this);
+   this.callBack = this.callBack.bind(this);
     this.evaluate = this.evaluate.bind(this);
   }
-  buttonClick = function(event) {
-    //console.log(event.target)
-    // console.log(event.target.getAttribute("value"))
+
+  callBack = function(dataFromButton){
+    console.log("-----",dataFromButton);
     var c = this.state.count;
-    let buttonValue = event.target.getAttribute('value');
+    this.setState({
+      data:dataFromButton
+    });
+    let buttonValue = dataFromButton;
     if (['+', '-', '*', '/'].includes(buttonValue) === true) {
       this.setState({
         count: c + 1,
@@ -34,7 +43,33 @@ class App extends Component {
         array: tempArr,
       });
     }
-  };
+
+
+  }
+
+
+
+
+  // buttonClick = function(event) {
+  //   //console.log(event.target)
+  //   // console.log(event.target.getAttribute("value"))
+  //   var c = this.state.count;
+  //   let buttonValue = event.target.getAttribute('value');
+  //   if (['+', '-', '*', '/'].includes(buttonValue) === true) {
+  //     this.setState({
+  //       count: c + 1,
+  //     });
+  //   }
+
+  //   if (this.state.count <= 1) {
+  //     let tempArr = this.state.array;
+  //     tempArr.push(buttonValue);
+
+  //     this.setState({
+  //       array: tempArr,
+  //     });
+  //   }
+  // };
   evaluate = function(event) {
     var operatorArray = ['+', '-', '*', '/'];
     var tempArraye = this.state.array;
@@ -103,14 +138,12 @@ class App extends Component {
     return (
       <div className="calculator-container">
         <div className="calculator__display">
-          {this.state.array}
+          <Input InputArray = {this.state.array} />
           <Result class="resultClass" result={this.state.result} />
         </div>
         <div className="calculator__buttons">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '+', '*', '-', '/'].map(val => (
-            <Bu value={val} onclick={this.buttonClick} id={val} />
-          ))}
-          <Bu value="=" onclick={this.evaluate} />
+        <Bu fun={this.callBack} calc={this.evaluate}/>
+           
         </div>
       </div>
     );
