@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import Bu from './buttonComponent'
-import Result from './resultComponent'
-
+import Bu from './buttonComponent';
+import Result from './resultComponent';
 
 class App extends Component {
   constructor() {
@@ -11,105 +10,94 @@ class App extends Component {
       data: '',
       result: '',
       array: [],
-      count: 0
+      count: 0,
     };
-    this.handleClick = this.handleClick.bind(this);
+    this.buttonClick = this.buttonClick.bind(this);
     this.evaluate = this.evaluate.bind(this);
   }
-  handleClick = function (event) {
+  buttonClick = function(event) {
     //console.log(event.target)
     // console.log(event.target.getAttribute("value"))
     var c = this.state.count;
-    let cal = event.target.getAttribute("value");
-    if (['+', '-', '*', '/'].includes(cal) === true) {
+    let buttonValue = event.target.getAttribute('value');
+    if (['+', '-', '*', '/'].includes(buttonValue) === true) {
       this.setState({
-        count: c + 1
-      })
+        count: c + 1,
+      });
     }
 
     if (this.state.count <= 1) {
-      let arr = this.state.array
-      arr.push(cal)
-
+      let tempArr = this.state.array;
+      tempArr.push(buttonValue);
 
       this.setState({
-
-        array: arr
-      })
-
+        array: tempArr,
+      });
     }
-  }
-  evaluate = function (event) {
-    
-  
-    var operatorArray = ['+', '-', '*', '/']
-    var arraye = this.state.array
-   
-    var a = arraye[0];
-    if (a !== '+'&& arraye.length>1) {
+  };
+  evaluate = function(event) {
+    var operatorArray = ['+', '-', '*', '/'];
+    var tempArraye = this.state.array;
+
+    var a = tempArraye[0];
+    if (a !== '+' && tempArraye.length > 1) {
       var b;
       var i = 1;
-      while (i < arraye.length) {
-        if (operatorArray.includes(arraye[i]) === false) {
-          a = "" + a + arraye[i];
-          i++
-        }
-        else
-          break;
-
+      while (i < tempArraye.length) {
+        if (operatorArray.includes(tempArraye[i]) === false) {
+          a = '' + a + tempArraye[i];
+          i++;
+        } else break;
       }
-      var operator = arraye[i];
+      var operator = tempArraye[i];
 
       i++;
-      b = arraye[i];
+      b = tempArraye[i];
       i++;
-      while (i < arraye.length) {
-        if (operatorArray.includes(arraye[i]) === false) {
-          b = "" + b + arraye[i];
-          i++
-        }
-        else
-          break;
-
+      while (i < tempArraye.length) {
+        if (operatorArray.includes(tempArraye[i]) === false) {
+          b = '' + b + tempArraye[i];
+          i++;
+        } else break;
       }
       //console.log(a)
       //console.log(b)
       //console.log(parseInt(a) +parseInt(b));
-    
-    var result;
-    switch (operator) {
-      case '+': result = parseInt(a, 10) + parseInt(b, 10); break;
-      case '-': console.log("minus"); result = a - b; break;
-      case '*': result = a * b; break;
-      case '/': result = a / b; break;
-      default: break;
 
+      var result;
+      switch (operator) {
+        case '+':
+          result = parseInt(a, 10) + parseInt(b, 10);
+          break;
+        case '-':
+          console.log('minus');
+          result = a - b;
+          break;
+        case '*':
+          result = a * b;
+          break;
+        case '/':
+          result = a / b;
+          break;
+        default:
+          break;
+      }
+
+      this.setState({
+        result: result,
+        data: '',
+        array: [result],
+        count: 0,
+      });
+    } else {
+      this.setState({
+        result: '',
+        data: '',
+        array: [],
+        count: 0,
+      });
     }
-  
-    
-   
-    this.setState({
-      result: result,
-      data: '',
-      array: [result],
-      count: 0
-
-    })
-  }
-  else{
-    this.setState({
-      result:'',
-      data: '',
-      array: [],
-      count: 0
-
-    })
-
-  }
-  }
-
-
-
+  };
 
   render() {
     return (
@@ -119,15 +107,11 @@ class App extends Component {
           <Result class="resultClass" result={this.state.result} />
         </div>
         <div className="calculator__buttons">
-          {
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '+', '*', '-', '/'].map((val) =>
-              <Bu value={val} onclick={this.handleClick} id={val} />
-            )
-          }
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '+', '*', '-', '/'].map(val => (
+            <Bu value={val} onclick={this.buttonClick} id={val} />
+          ))}
           <Bu value="=" onclick={this.evaluate} />
-
         </div>
-
       </div>
     );
   }
